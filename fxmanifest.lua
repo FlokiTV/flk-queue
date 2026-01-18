@@ -6,6 +6,8 @@ game 'gta5'
 
 
 server_scripts {
+    'server/libs/Match.lua',
+    'server/libs/Queue.lua',
     'server/main.lua'
 }
 
