@@ -45,8 +45,13 @@ function Queue:add(userId)
     table.insert(self.queue, userId)
     self.inQueue[userId] = true
 
-    self:_tryCreateMatch()
     self:syncStats()
+
+    TriggerClientEvent('queue:state', SourceFromNetId(userId), {
+        state = 'queue'
+    })
+
+    self:_tryCreateMatch()
 
     return true, 'Jogador adicionado à fila com sucesso.'
 end
@@ -68,7 +73,9 @@ function Queue:remove(userId)
 
     self.inQueue[userId] = nil
     self:syncStats()
-
+    TriggerClientEvent('queue:state', SourceFromNetId(userId), {
+        state = ''
+    })
     return true, 'Jogador removido da fila com sucesso.'
 end
 
@@ -113,7 +120,7 @@ function Queue:_tryCreateMatch()
     end
 
     for _, player in ipairs(players) do
-        self.inQueue[player] = nil
+        self:remove(player)
     end
 
     Match.new(players, self.cfg)
