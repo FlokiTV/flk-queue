@@ -23,8 +23,8 @@ function DrawTextCustom(x, y, text, scale, color, font, center)
     DrawText(x, y)
 end
 
+--- Revives the player ped
 function Revive()
-    print('Revive')
     local pos = GetEntityCoords(PlayerPedId(), false)
     local ped = PlayerPedId()
     SetEntityCoordsNoOffset(
