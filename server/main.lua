@@ -21,9 +21,11 @@ QueueManager = Queue.new({
             local spawn = spawns[i]
 
             SetPlayerRoutingBucket(tostring(playerSource), match.matchId)
+            TriggerClientEvent('queue:health', playerSource, 200)
             Citizen.Wait(200)
             SetEntityCoords(playerPed, spawn.coords.x, spawn.coords.y, spawn.coords.z, true, false, false, true)
             SetEntityHeading(playerPed, spawn.heading)
+            TriggerClientEvent('queue:weapon', playerSource, 'WEAPON_PISTOL')
         end
 
         Citizen.Wait(500)
