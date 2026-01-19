@@ -1,13 +1,7 @@
 QueueManager = Queue.new({
-    maxPlayers = 2,
+    maxPlayers = Config.maxPlayers,
     onStart = function(match)
         print('Match created with id: ' .. match.matchId)
-
-        local spawns = {
-            { coords = vector3(-1285.3945, -450.8088, 103.4655), heading = 34.0079 },
-            { coords = vector3(-1305.8623, -418.2008, 103.4656), heading = 215.3134 }
-        }
-
         for _, playerNetId in ipairs(match.players) do
             local playerSource = SourceFromNetId(playerNetId)
             TriggerClientEvent(Event('fadeOut'), playerSource, 500)
@@ -18,9 +12,7 @@ QueueManager = Queue.new({
         for i, playerNetId in ipairs(match.players) do
             local playerPed = NetworkGetEntityFromNetworkId(playerNetId)
             local playerSource = SourceFromNetId(playerNetId)
-            local spawn = spawns[i]
-
-            SetPlayerRoutingBucket(tostring(playerSource), match.matchId)
+            local spawn = Config.spawns[i]
             TriggerClientEvent(Event('health'), playerSource, 200)
             Citizen.Wait(200)
             SetEntityCoords(playerPed, spawn.coords.x, spawn.coords.y, spawn.coords.z, true, false, false, true)

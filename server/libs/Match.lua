@@ -42,6 +42,7 @@ function Match.new(players, cfg)
         playersMatch[player] = self.matchId
         local source = SourceFromNetId(player)
         self:setPlayerData(player)
+        SetPlayerRoutingBucket(tostring(source), self.matchId)
         TriggerClientEvent(Event('state'), source, {
             state = 'match'
         })
