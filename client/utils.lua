@@ -41,7 +41,7 @@ function Revive()
         false,
         false
     )
-    NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z, 0, 5000, true)
+    NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z, 0, 500, true)
     ResurrectPed(ped)
     SetEntityHealth(ped, GetEntityMaxHealth(ped))
     ClearPedBloodDamage(ped)
