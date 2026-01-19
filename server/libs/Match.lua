@@ -99,12 +99,14 @@ end
 --- @param playerId number
 function Match:resetPlayerData(playerId)
     local playerData = self.playerData[playerId]
-    if playerData then
-        local playerPed = NetworkGetEntityFromNetworkId(playerId)
-        SetEntityHealth(playerPed, playerData.health)
-        SetPedArmour(playerPed, playerData.armour)
-        SetEntityCoords(playerPed, playerData.coords[1], playerData.coords[2], playerData.coords[3], true, false, false,
-            false)
-        SetEntityHeading(playerPed, playerData.heading)
-    end
+    local playerPed = NetworkGetEntityFromNetworkId(playerId)
+    local playerSource = NetworkGetEntityOwner(playerPed)
+    if playerData == nil then return end
+
+    TriggerClientEvent('match:health', playerSource, playerData.health)
+    Wait(200)
+    SetPedArmour(playerPed, playerData.armour)
+    SetEntityCoords(playerPed, playerData.coords[1], playerData.coords[2], playerData.coords[3], true, false, false,
+        true)
+    SetEntityHeading(playerPed, playerData.heading)
 end

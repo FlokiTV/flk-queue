@@ -36,3 +36,35 @@ RegisterCommand('queue', function(source, args, rawCommand)
     print('isInQueue: ' .. (QueueManager:isInQueue(nId) and 'true' or 'false'))
     print('matchesCount: ' .. Match:getMatchesCount())
 end, false)
+
+CreateThread(function()
+    while true do
+        Citizen.Wait(200)
+        local runningMatches = Match:getRunningMatches()
+
+        for _, match in ipairs(runningMatches) do
+            local players = match.players
+            local loser = false
+            for _, player in ipairs(players) do
+                local playerPed = NetworkGetEntityFromNetworkId(player)
+                local playerSource = NetworkGetEntityOwner(playerPed)
+                local isDead = GetEntityHealth(playerPed) <= 101
+                -- stop match if player is dead
+                if isDead then
+                    loser = player
+                    logClient(playerSource, 'You lose!')
+                    match:stop()
+                end
+            end
+            -- if loser, send message to winner
+            if loser then
+                local winner = players[1] == loser and players[2] or players[1]
+                print('Match ended ' .. match.matchId)
+                print('loser: ' .. loser)
+                print('winner: ' .. winner)
+                logClient(winner, 'You win!')
+            end
+            print('')
+        end
+    end
+end)
