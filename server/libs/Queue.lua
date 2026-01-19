@@ -31,7 +31,7 @@ function Queue:add(userId)
     self.inQueue[userId] = true
 
     self:_tryCreateMatch()
-    self:_syncStats()
+    self:syncStats()
 
     return true, 'Jogador adicionado à fila com sucesso.'
 end
@@ -52,7 +52,7 @@ function Queue:remove(userId)
     end
 
     self.inQueue[userId] = nil
-    self:_syncStats()
+    self:syncStats()
 
     return true, 'Jogador removido da fila com sucesso.'
 end
@@ -70,6 +70,17 @@ function Queue:getQueueCount()
     return #self.queue
 end
 
+--- Syncs stats with clients
+function Queue:syncStats()
+    TriggerClientEvent(
+        'match:status',
+        -1,
+        {
+            queueCount = self:getQueueCount(),
+            matchesCount = Match:getMatchesCount()
+        }
+    )
+end
 ---------------------------------------------------
 -- INTERNAL METHODS (PRIVATE)
 ---------------------------------------------------
@@ -89,16 +100,4 @@ function Queue:_tryCreateMatch()
     self.inQueue[players[2]] = nil
 
     Match.new(players)
-end
-
---- Syncs stats with clients
-function Queue:_syncStats()
-    TriggerClientEvent(
-        'match:status',
-        -1,
-        {
-            queueCount = self:getQueueCount(),
-            matchesCount = Match:getMatchesCount()
-        }
-    )
 end
