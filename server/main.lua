@@ -17,7 +17,7 @@ QueueManager = Queue.new({
             Citizen.Wait(200)
             SetEntityCoords(playerPed, spawn.coords.x, spawn.coords.y, spawn.coords.z, true, false, false, true)
             SetEntityHeading(playerPed, spawn.heading)
-            TriggerClientEvent(Event('weapon'), playerSource, 'WEAPON_PISTOL')
+            TriggerClientEvent(Event('weapon'), playerSource, Config.Weapon)
         end
 
         Citizen.Wait(500)
