@@ -22,6 +22,32 @@ QueueManager = Queue.new({
         TriggerClientEvent('queue:fadeIn', player1Source, 500)
         TriggerClientEvent('queue:fadeIn', player2Source, 500)
     end,
+    onStop = function(match)
+        print('Match ended with id: ' .. match.matchId)
+    end,
+    onTick = function(match)
+        local players = match.players
+        local loser = false
+        for _, player in ipairs(players) do
+            local playerPed = NetworkGetEntityFromNetworkId(player)
+            local playerSource = NetworkGetEntityOwner(playerPed)
+            local isDead = GetEntityHealth(playerPed) <= 101
+            if isDead then
+                loser = player
+                TriggerClientEvent('queue:lose', playerSource)
+            end
+        end
+        -- if loser, send message to winner
+        if loser then
+            local winner = players[1] == loser and players[2] or players[1]
+            local playerPed = NetworkGetEntityFromNetworkId(winner)
+            local playerSource = NetworkGetEntityOwner(playerPed)
+            TriggerClientEvent('queue:win', playerSource)
+            -- stop match if player is dead
+            match:stop()
+            QueueManager:syncStats()
+        end
+    end
 })
 
 RegisterCommand('queue', function(source, args, rawCommand)
@@ -65,31 +91,7 @@ CreateThread(function()
         local runningMatches = Match:getRunningMatches()
 
         for _, match in ipairs(runningMatches) do
-            local players = match.players
-            local loser = false
-            for _, player in ipairs(players) do
-                local playerPed = NetworkGetEntityFromNetworkId(player)
-                local playerSource = NetworkGetEntityOwner(playerPed)
-                local isDead = GetEntityHealth(playerPed) <= 101
-                -- stop match if player is dead
-                if isDead then
-                    loser = player
-                    Log(playerSource, 'You lose!')
-                    match:stop()
-                    QueueManager:syncStats()
-                end
-            end
-            -- if loser, send message to winner
-            if loser then
-                local winner = players[1] == loser and players[2] or players[1]
-                local playerPed = NetworkGetEntityFromNetworkId(winner)
-                local playerSource = NetworkGetEntityOwner(playerPed)
-                -- print('Match ended ' .. match.matchId)
-                -- print('loser: ' .. loser)
-                -- print('winner: ' .. winner)
-                -- print('')
-                Log(playerSource, 'You win!')
-            end
+            match:tick()
         end
     end
 end)

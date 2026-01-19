@@ -1,4 +1,6 @@
 local showStatus = false
+local showWinner = false
+local showLoser = false
 local statusData = {
     queueCount = 0,
     matchesCount = 0
@@ -20,6 +22,34 @@ RegisterNetEvent('queue:health', function(health)
     Revive()
     Citizen.Wait(100)
     SetEntityHealth(PlayerPedId(), health)
+end)
+
+RegisterNetEvent('queue:win', function()
+    showWinner = true
+    SetTimeout(5000, function()
+        showWinner = false
+    end)
+    Citizen.CreateThread(function()
+        while showWinner do
+            Citizen.Wait(0)
+            DrawTextCustom(0.5, 0.5, 'YOU WIN!', 5.0,
+                { r = 255, g = 255, b = 255, a = 255 }, 4, true)
+        end
+    end)
+end)
+
+RegisterNetEvent('queue:lose', function()
+    showLoser = true
+    SetTimeout(5000, function()
+        showLoser = false
+    end)
+    Citizen.CreateThread(function()
+        while showLoser do
+            Citizen.Wait(0)
+            DrawTextCustom(0.5, 0.5, 'YOU LOSE!', 5.0,
+                { r = 255, g = 255, b = 255, a = 255 }, 4, true)
+        end
+    end)
 end)
 
 RegisterNetEvent('queue:log', function(data)
@@ -47,3 +77,18 @@ RegisterCommand("givepistol", function(source, args, rawCommand)
     local myselfPed = PlayerPedId()
     GiveWeaponToPed(myselfPed, GetHashKey('WEAPON_PISTOL'), 100, false, true)
 end, false)
+
+
+-- Citizen.CreateThread(function()
+--     while true do
+
+--         if showLoser then
+--             Citizen.Wait(0)
+--             DrawTextCustom(0.5, 0.5, 'YOU LOSE!', 5.0,
+--                 { r = 255, g = 255, b = 255, a = 255 }, 4, true)
+--         end
+--         if not showWinner and not showLoser then
+--             Citizen.Wait(1000)
+--         end
+--     end
+-- end)

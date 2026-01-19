@@ -20,6 +20,12 @@ function Queue.new(cfg)
     if cfg.onStart then
         self.cfg.onStart = cfg.onStart
     end
+    if cfg.onStop then
+        self.cfg.onStop = cfg.onStop
+    end
+    if cfg.onTick then
+        self.cfg.onTick = cfg.onTick
+    end
 
     return self
 end
@@ -110,11 +116,5 @@ function Queue:_tryCreateMatch()
         self.inQueue[player] = nil
     end
 
-    local cfg = {}
-
-    if self.cfg.onStart then
-        cfg.onStart = self.cfg.onStart
-    end
-
-    Match.new(players, cfg)
+    Match.new(players, self.cfg)
 end

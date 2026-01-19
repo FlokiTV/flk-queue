@@ -5,16 +5,28 @@ local matches = {}
 local matchId = 0
 local playersMatch = {}
 
+--- Creates a new match
+--- @param players table
+--- @param cfg table
+--- @return table
 function Match.new(players, cfg)
     local self = setmetatable({}, Match)
+    table.insert(matches, self)
+
     self.players = players
     matchId = matchId + 1
     self.matchId = matchId
     self.playerData = {}
+    -- callbacks
     if cfg.onStart then
         self.onStart = cfg.onStart
     end
-    table.insert(matches, self)
+    if cfg.onStop then
+        self.onStop = cfg.onStop
+    end
+    if cfg.onTick then
+        self.onTick = cfg.onTick
+    end
 
     for _, player in ipairs(self.players) do
         playersMatch[player] = self.matchId
@@ -26,18 +38,33 @@ function Match.new(players, cfg)
     return self
 end
 
+--- Ticks the match
+function Match:tick()
+    if self.onTick then
+        self.onTick(self)
+    end
+end
+
 --- Stops the match and restores the player's data
 function Match:stop()
-    for _, player in ipairs(self.players) do
-        self:resetPlayerData(player)
-        playersMatch[player] = nil
-    end
     -- remove on matches table
     for i, match in ipairs(matches) do
         if match.matchId == self.matchId then
             table.remove(matches, i)
             break
         end
+    end
+
+    Citizen.Wait(5000)
+
+    for _, player in ipairs(self.players) do
+        self:resetPlayerData(player)
+        playersMatch[player] = nil
+    end
+
+    -- callback
+    if self.onStop then
+        self.onStop(self)
     end
 end
 
