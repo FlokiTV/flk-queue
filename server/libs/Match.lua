@@ -104,7 +104,7 @@ function Match:resetPlayerData(playerId)
     if playerData == nil then return end
 
     TriggerClientEvent('match:health', playerSource, playerData.health)
-    Wait(200)
+    Citizen.Wait(1000)
     SetPedArmour(playerPed, playerData.armour)
     SetEntityCoords(playerPed, playerData.coords[1], playerData.coords[2], playerData.coords[3], true, false, false,
         true)
