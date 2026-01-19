@@ -40,7 +40,11 @@ function Match.new(players, cfg)
 
     for _, player in ipairs(self.players) do
         playersMatch[player] = self.matchId
+        local source = SourceFromNetId(player)
         self:setPlayerData(player)
+        TriggerClientEvent('queue:state', source, {
+            state = 'match'
+        })
     end
     if self.onStart then
         self.onStart(self)
@@ -70,6 +74,9 @@ function Match:stop()
     for _, player in ipairs(self.players) do
         self:resetPlayerData(player)
         playersMatch[player] = nil
+        TriggerClientEvent('queue:state', SourceFromNetId(player), {
+            state = ''
+        })
     end
 
     -- callback

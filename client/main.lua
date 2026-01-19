@@ -8,9 +8,15 @@ RegisterCommand('status', function()
         Citizen.CreateThread(function()
             while showStatus do
                 Citizen.Wait(5)
+                local state = StatusData.state
+                if state == '' then
+                    state = 'idle'
+                end
                 DrawTextCustom(0.01, 0.35, 'Queue: ' .. StatusData.queueCount, 0.5,
                     { r = 255, g = 255, b = 255, a = 255 }, 4, false)
                 DrawTextCustom(0.01, 0.38, 'Matches: ' .. StatusData.matchesCount, 0.5,
+                    { r = 255, g = 255, b = 255, a = 255 }, 4, false)
+                DrawTextCustom(0.01, 0.41, 'State: ' .. state, 0.5,
                     { r = 255, g = 255, b = 255, a = 255 }, 4, false)
             end
         end)
