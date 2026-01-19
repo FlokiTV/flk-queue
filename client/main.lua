@@ -10,7 +10,7 @@ end)
 
 RegisterNetEvent('match:health', function(health)
     Revive()
-    Wait(100)
+    Citizen.Wait(100)
     SetEntityHealth(PlayerPedId(), health)
 end)
 

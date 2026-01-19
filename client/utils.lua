@@ -25,6 +25,11 @@ end
 
 --- Revives the player ped
 function Revive()
+    DoScreenFadeOut(200) -- 1000 ms = 1 second
+    while not IsScreenFadedOut() do
+        Citizen.Wait(0)
+    end
+
     local pos = GetEntityCoords(PlayerPedId(), false)
     local ped = PlayerPedId()
     SetEntityCoordsNoOffset(
@@ -45,4 +50,6 @@ function Revive()
     NetworkSetFriendlyFireOption(true)
     ShutdownLoadingScreen()
     FreezeEntityPosition(ped, false)
+    Citizen.Wait(1000)
+    DoScreenFadeIn(200)
 end
