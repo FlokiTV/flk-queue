@@ -4,11 +4,19 @@ local statusData = {
     matchesCount = 0
 }
 
-RegisterNetEvent('match:status', function(status)
+RegisterNetEvent('queue:fadeIn', function(time)
+    DoScreenFadeIn(time)
+end)
+
+RegisterNetEvent('queue:fadeOut', function(time)
+    DoScreenFadeOut(time)
+end)
+
+RegisterNetEvent('queue:status', function(status)
     statusData = status
 end)
 
-RegisterNetEvent('match:health', function(health)
+RegisterNetEvent('queue:health', function(health)
     Revive()
     Citizen.Wait(100)
     SetEntityHealth(PlayerPedId(), health)
