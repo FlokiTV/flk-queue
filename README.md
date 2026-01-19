@@ -6,6 +6,10 @@ This resource provides a simple queue and match management system for FiveM.
 
 ## How it Works
 
+
+https://github.com/user-attachments/assets/cd9243d5-4d9e-42f7-b7c0-73af733f89d2
+
+
 ### Queue
 
 - Players can join or leave the queue using the `/queue` command.
