@@ -1,6 +1,6 @@
 local showWinner = false
 
-RegisterNetEvent('queue:win', function()
+RegisterNetEvent(Event('win'), function()
     showWinner = true
     SetTimeout(5000, function()
         showWinner = false

@@ -1,6 +1,6 @@
 local showLoser = false
 
-RegisterNetEvent('queue:lose', function()
+RegisterNetEvent(Event('lose'), function()
     showLoser = true
     SetTimeout(5000, function()
         showLoser = false

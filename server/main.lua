@@ -10,7 +10,7 @@ QueueManager = Queue.new({
 
         for _, playerNetId in ipairs(match.players) do
             local playerSource = SourceFromNetId(playerNetId)
-            TriggerClientEvent('queue:fadeOut', playerSource, 500)
+            TriggerClientEvent(Event('fadeOut'), playerSource, 500)
         end
 
         Citizen.Wait(500)
@@ -21,18 +21,18 @@ QueueManager = Queue.new({
             local spawn = spawns[i]
 
             SetPlayerRoutingBucket(tostring(playerSource), match.matchId)
-            TriggerClientEvent('queue:health', playerSource, 200)
+            TriggerClientEvent(Event('health'), playerSource, 200)
             Citizen.Wait(200)
             SetEntityCoords(playerPed, spawn.coords.x, spawn.coords.y, spawn.coords.z, true, false, false, true)
             SetEntityHeading(playerPed, spawn.heading)
-            TriggerClientEvent('queue:weapon', playerSource, 'WEAPON_PISTOL')
+            TriggerClientEvent(Event('weapon'), playerSource, 'WEAPON_PISTOL')
         end
 
         Citizen.Wait(500)
 
         for _, playerNetId in ipairs(match.players) do
             local playerSource = SourceFromNetId(playerNetId)
-            TriggerClientEvent('queue:fadeIn', playerSource, 500)
+            TriggerClientEvent(Event('fadeIn'), playerSource, 500)
         end
     end,
     onStop = function(match)
@@ -47,7 +47,7 @@ QueueManager = Queue.new({
             local isDead = GetEntityHealth(playerPed) <= 101
             if isDead then
                 loser = player
-                TriggerClientEvent('queue:lose', playerSource)
+                TriggerClientEvent(Event('lose'), playerSource)
             end
         end
         -- if loser, send message to winner
@@ -55,7 +55,7 @@ QueueManager = Queue.new({
             local winner = players[1] == loser and players[2] or players[1]
             local playerPed = NetworkGetEntityFromNetworkId(winner)
             local playerSource = NetworkGetEntityOwner(playerPed)
-            TriggerClientEvent('queue:win', playerSource)
+            TriggerClientEvent(Event('win'), playerSource)
             -- stop match if player is dead
             match:stop()
             QueueManager:syncStats()

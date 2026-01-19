@@ -7,7 +7,7 @@ local playersMatch = {}
 
 CreateThread(function()
     while true do
-        Citizen.Wait(200)
+        Citizen.Wait(Config.matchTickMs)
         local runningMatches = Match:getRunningMatches()
         for _, match in ipairs(runningMatches) do
             match:tick()
@@ -42,7 +42,7 @@ function Match.new(players, cfg)
         playersMatch[player] = self.matchId
         local source = SourceFromNetId(player)
         self:setPlayerData(player)
-        TriggerClientEvent('queue:state', source, {
+        TriggerClientEvent(Event('state'), source, {
             state = 'match'
         })
     end
@@ -74,7 +74,7 @@ function Match:stop()
     for _, player in ipairs(self.players) do
         self:resetPlayerData(player)
         playersMatch[player] = nil
-        TriggerClientEvent('queue:state', SourceFromNetId(player), {
+        TriggerClientEvent(Event('state'), SourceFromNetId(player), {
             state = ''
         })
     end
@@ -155,7 +155,7 @@ function Match:resetPlayerData(playerId)
     local playerPed = NetworkGetEntityFromNetworkId(playerId)
     local playerSource = NetworkGetEntityOwner(playerPed)
     if playerData == nil then return end
-    TriggerClientEvent('queue:health', playerSource, playerData.health)
+    TriggerClientEvent(Event('health'), playerSource, playerData.health)
     -- Set player bucket
     SetPlayerRoutingBucket(tostring(playerSource), playerData.bucket)
     Citizen.Wait(1000)

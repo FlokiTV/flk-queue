@@ -1,4 +1,4 @@
-RegisterNetEvent('queue:health', function(health)
+RegisterNetEvent(Event('health'), function(health)
     Revive()
     Citizen.Wait(100)
     SetEntityHealth(PlayerPedId(), health)

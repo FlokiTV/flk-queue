@@ -1,7 +1,7 @@
-RegisterNetEvent('queue:fadeIn', function(time)
+RegisterNetEvent(Event('fadeIn'), function(time)
     DoScreenFadeIn(time)
 end)
 
-RegisterNetEvent('queue:fadeOut', function(time)
+RegisterNetEvent(Event('fadeOut'), function(time)
     DoScreenFadeOut(time)
 end)

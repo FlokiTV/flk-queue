@@ -47,7 +47,7 @@ function Queue:add(userId)
 
     self:syncStats()
 
-    TriggerClientEvent('queue:state', SourceFromNetId(userId), {
+    TriggerClientEvent(Event('state'), SourceFromNetId(userId), {
         state = 'queue'
     })
 
@@ -73,7 +73,7 @@ function Queue:remove(userId)
 
     self.inQueue[userId] = nil
     self:syncStats()
-    TriggerClientEvent('queue:state', SourceFromNetId(userId), {
+    TriggerClientEvent(Event('state'), SourceFromNetId(userId), {
         state = ''
     })
     return true, 'Jogador removido da fila com sucesso.'
@@ -95,7 +95,7 @@ end
 --- Syncs stats with clients
 function Queue:syncStats()
     TriggerClientEvent(
-        'queue:status',
+        Event('status'),
         -1,
         {
             queueCount = self:getQueueCount(),

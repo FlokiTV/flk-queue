@@ -4,6 +4,10 @@ description 'Queue system'
 version '1.0.0'
 game 'gta5'
 
+shared_scripts {
+    'config.lua',
+    'shared/utils.lua'
+}
 
 server_scripts {
     'server/utils.lua',
