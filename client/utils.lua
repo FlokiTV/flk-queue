@@ -22,3 +22,27 @@ function DrawTextCustom(x, y, text, scale, color, font, center)
     AddTextComponentString(text)
     DrawText(x, y)
 end
+
+function Revive()
+    print('Revive')
+    local pos = GetEntityCoords(PlayerPedId(), false)
+    local ped = PlayerPedId()
+    SetEntityCoordsNoOffset(
+        PlayerPedId(),
+        pos.x,
+        pos.y,
+        pos.z,
+        false,
+        false,
+        false
+    )
+    NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z, 0, 5000, true)
+    ResurrectPed(ped)
+    SetEntityHealth(ped, GetEntityMaxHealth(ped))
+    ClearPedBloodDamage(ped)
+    RestorePlayerStamina(PlayerId(), 100.0)
+    SetCanAttackFriendly(ped, true, true)
+    NetworkSetFriendlyFireOption(true)
+    ShutdownLoadingScreen()
+    FreezeEntityPosition(ped, false)
+end

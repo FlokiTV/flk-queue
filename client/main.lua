@@ -10,6 +10,12 @@ RegisterNetEvent('match:status', function(status)
     statusData = status
 end)
 
+RegisterNetEvent('match:health', function(health)
+    Revive()
+    Wait(100)
+    SetEntityHealth(PlayerPedId(), health)
+end)
+
 RegisterNetEvent('queue:log', function(data)
     print('[QUEUE]', data)
 end)
