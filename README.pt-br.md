@@ -5,7 +5,7 @@
 Este recurso fornece um sistema simples de fila e gerenciamento de partidas para FiveM.
 
 ## Como Funciona
-
+https://github.com/user-attachments/assets/cd9243d5-4d9e-42f7-b7c0-73af733f89d2
 ### Fila
 - Os jogadores podem entrar ou sair da fila usando o comando `/queue`.
 - O sistema gerencia os jogadores em uma lista, esperando participantes suficientes para iniciar uma partida.
