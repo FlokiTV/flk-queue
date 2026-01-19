@@ -2,21 +2,27 @@ Match = {}
 Match.__index = Match
 
 local matches = {}
+local matchId = 0
 local playersMatch = {}
 
 function Match.new(players, cfg)
     local self = setmetatable({}, Match)
     self.players = players
-    self.matchId = #matches + 1
+    matchId = matchId + 1
+    self.matchId = matchId
     self.playerData = {}
-    self.onStart = cfg.onStart or function(match) end
+    if cfg.onStart then
+        self.onStart = cfg.onStart
+    end
     table.insert(matches, self)
-    
+
     for _, player in ipairs(self.players) do
         playersMatch[player] = self.matchId
         self:setPlayerData(player)
     end
-    self.onStart(self)
+    if self.onStart then
+        self.onStart(self)
+    end
     return self
 end
 
@@ -80,17 +86,21 @@ end
 function Match:setPlayerData(playerId)
     self.playerData[playerId] = {}
     local playerPed = NetworkGetEntityFromNetworkId(playerId)
+    local playerSource = NetworkGetEntityOwner(playerPed)
 
     local playerHealth = GetEntityHealth(playerPed)
     local playerArmor = GetPedArmour(playerPed)
 
     local playerCoords = GetEntityCoords(playerPed)
     local playerHeading = GetEntityHeading(playerPed)
+    local playerBucket = GetPlayerRoutingBucket(tostring(playerSource))
+
     self.playerData[playerId] = {
         health = playerHealth,
         armour = playerArmor,
         coords = playerCoords,
-        heading = playerHeading
+        heading = playerHeading,
+        bucket = playerBucket
     }
 end
 
@@ -101,7 +111,9 @@ function Match:resetPlayerData(playerId)
     local playerPed = NetworkGetEntityFromNetworkId(playerId)
     local playerSource = NetworkGetEntityOwner(playerPed)
     if playerData == nil then return end
-    TriggerClientEvent('match:health', playerSource, playerData.health)
+    TriggerClientEvent('queue:health', playerSource, playerData.health)
+    -- Set player bucket
+    SetPlayerRoutingBucket(tostring(playerSource), playerData.bucket)
     Citizen.Wait(1000)
     SetPedArmour(playerPed, playerData.armour)
     SetEntityCoords(playerPed, playerData.coords[1], playerData.coords[2], playerData.coords[3], true, false, false,
