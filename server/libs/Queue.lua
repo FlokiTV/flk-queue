@@ -18,7 +18,7 @@ function Queue.new(cfg)
     self.maxPlayers = cfg.maxPlayers or 2
 
     if cfg.onStart then
-        self.onStart = cfg.onStart
+        self.cfg.onStart = cfg.onStart
     end
 
     return self
@@ -82,7 +82,7 @@ end
 --- Syncs stats with clients
 function Queue:syncStats()
     TriggerClientEvent(
-        'match:status',
+        'queue:status',
         -1,
         {
             queueCount = self:getQueueCount(),
