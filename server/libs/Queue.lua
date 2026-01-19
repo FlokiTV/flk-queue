@@ -2,7 +2,7 @@ Queue = {}
 Queue.__index = Queue
 
 --- Cria uma nova fila
---- @return Queue
+--- @return table
 function Queue.new()
     local self = setmetatable({}, Queue)
 
@@ -88,15 +88,17 @@ function Queue:_tryCreateMatch()
     self.inQueue[players[1]] = nil
     self.inQueue[players[2]] = nil
 
-    Match.create(players)
+    Match.new(players)
 end
 
 --- Sincroniza estatísticas com os clientes
 function Queue:_syncStats()
     TriggerClientEvent(
-        'match:receiveStats',
+        'match:status',
         -1,
-        self:getQueueCount(),
-        Match.getMatchesCount()
+        {
+            queueCount = self:getQueueCount(),
+            matchesCount = Match:getMatchesCount()
+        }
     )
 end
