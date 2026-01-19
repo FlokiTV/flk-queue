@@ -1,3 +1,11 @@
+--- Draws a text on the screen
+--- @param x number
+--- @param y number
+--- @param text string
+--- @param scale number
+--- @param color table
+--- @param font number
+--- @param center boolean
 function DrawTextCustom(x, y, text, scale, color, font, center)
     -- Defaults
     scale  = scale or 0.35
