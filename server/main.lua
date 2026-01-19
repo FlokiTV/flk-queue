@@ -53,16 +53,12 @@ QueueManager = Queue.new({
 RegisterCommand('queue', function(source, args, rawCommand)
     local userId = source == 0 and args[1] or source
     local userPed = GetPlayerPed(userId)
-    -- Log(source, 'userId: ' .. userId)
-    -- Log(source, 'userPed: ' .. userPed)
     if userPed == 0 then
         Log(source, 'Invalid player ped')
         return
     end
 
     local nId = NetworkGetNetworkIdFromEntity(userPed)
-    -- Log(source, 'userNetId: ' .. nId)
-    -- Log(source, 'isPlayerInMatch: ' .. (Match.isPlayerInMatch(nId) and 'true' or 'false'))
     if Match.isPlayerInMatch(nId) then
         Log(source, 'You are already in a match')
         return
@@ -73,10 +69,6 @@ RegisterCommand('queue', function(source, args, rawCommand)
     else
         QueueManager:add(nId)
     end
-
-    -- print('queueCount: ' .. QueueManager:getQueueCount())
-    -- print('isInQueue: ' .. (QueueManager:isInQueue(nId) and 'true' or 'false'))
-    -- print('matchesCount: ' .. Match:getMatchesCount())
 end, false)
 
 RegisterCommand('bucket', function(source, args, rawCommand)
@@ -84,14 +76,3 @@ RegisterCommand('bucket', function(source, args, rawCommand)
     local bucket = GetPlayerRoutingBucket(tostring(userId))
     Log(source, 'bucket: ' .. bucket)
 end, false)
-
-CreateThread(function()
-    while true do
-        Citizen.Wait(200)
-        local runningMatches = Match:getRunningMatches()
-
-        for _, match in ipairs(runningMatches) do
-            match:tick()
-        end
-    end
-end)

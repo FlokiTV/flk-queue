@@ -32,8 +32,8 @@ RegisterNetEvent('queue:win', function()
     Citizen.CreateThread(function()
         while showWinner do
             Citizen.Wait(0)
-            DrawTextCustom(0.5, 0.5, 'YOU WIN!', 5.0,
-                { r = 255, g = 255, b = 255, a = 255 }, 4, true)
+            DrawTextCustom(0.5, 0.4, 'YOU WIN!', 3.0,
+                { r = 95, g = 255, b = 156, a = 255 }, 4, true)
         end
     end)
 end)
@@ -46,8 +46,8 @@ RegisterNetEvent('queue:lose', function()
     Citizen.CreateThread(function()
         while showLoser do
             Citizen.Wait(0)
-            DrawTextCustom(0.5, 0.5, 'YOU LOSE!', 5.0,
-                { r = 255, g = 255, b = 255, a = 255 }, 4, true)
+            DrawTextCustom(0.5, 0.4, 'YOU LOSE!', 3.0,
+                { r = 255, g = 95, b = 95, a = 255 }, 4, true)
         end
     end)
 end)
