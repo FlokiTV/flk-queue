@@ -28,20 +28,20 @@ function Match:endMatch()
     end
 end
 
---- Retorna quantidade de partidas criadas
+--- Returns the number of created matches
 --- @return number
 function Match:getMatchesCount()
     return #matches
 end
 
---- Verifica se o jogador está na partida
+--- Checks whether the player is in a match
 --- @param playerId number
 --- @return boolean
 function Match.isPlayerInMatch(playerId)
     return playersMatch[playerId] ~= nil
 end
 
---- Salva os dados do jogador
+--- Saves the player's data
 --- @param playerId number
 function Match:setPlayerData(playerId)
     self.playerData[playerId] = {}
@@ -60,7 +60,7 @@ function Match:setPlayerData(playerId)
     }
 end
 
---- Reseta os dados do jogador
+--- Restores the player's data
 --- @param playerId number
 function Match:resetPlayerData(playerId)
     local playerData = self.playerData[playerId]

@@ -1,25 +1,25 @@
 Queue = {}
 Queue.__index = Queue
 
---- Cria uma nova fila
+--- Creates a new queue
 --- @return table
 function Queue.new()
     local self = setmetatable({}, Queue)
 
-    -- ordem FIFO
+    -- FIFO order
     self.queue = {}
 
-    -- lookup rápido
+    -- quick lookup
     self.inQueue = {}
 
     return self
 end
 
 ---------------------------------------------------
--- MÉTODOS PÚBLICOS
+-- PUBLIC METHODS
 ---------------------------------------------------
 
---- Adiciona um jogador à fila
+--- Adds a player to the queue
 --- @param userId number
 --- @return boolean, string
 function Queue:add(userId)
@@ -36,7 +36,7 @@ function Queue:add(userId)
     return true, 'Jogador adicionado à fila com sucesso.'
 end
 
---- Remove um jogador da fila
+--- Removes a player from the queue
 --- @param userId number
 --- @return boolean, string
 function Queue:remove(userId)
@@ -57,24 +57,24 @@ function Queue:remove(userId)
     return true, 'Jogador removido da fila com sucesso.'
 end
 
---- Verifica se o jogador está na fila
+--- Checks whether the player is in the queue
 --- @param userId number
 --- @return boolean
 function Queue:isInQueue(userId)
     return self.inQueue[userId] == true
 end
 
---- Retorna quantidade de jogadores na fila
+--- Returns the number of players in the queue
 --- @return number
 function Queue:getQueueCount()
     return #self.queue
 end
 
 ---------------------------------------------------
--- MÉTODOS INTERNOS (PRIVATE)
+-- INTERNAL METHODS (PRIVATE)
 ---------------------------------------------------
 
---- Tenta criar uma partida
+--- Tries to create a match
 function Queue:_tryCreateMatch()
     if #self.queue < 2 then
         return
@@ -91,7 +91,7 @@ function Queue:_tryCreateMatch()
     Match.new(players)
 end
 
---- Sincroniza estatísticas com os clientes
+--- Syncs stats with clients
 function Queue:_syncStats()
     TriggerClientEvent(
         'match:status',
