@@ -21,11 +21,46 @@ function Match.new(players)
     return self
 end
 
-function Match:endMatch()
+--- Stops the match and restores the player's data
+function Match:stop()
     for _, player in ipairs(self.players) do
         self:resetPlayerData(player)
         playersMatch[player] = nil
     end
+    -- remove on matches table
+    for i, match in ipairs(matches) do
+        if match.matchId == self.matchId then
+            table.remove(matches, i)
+            break
+        end
+    end
+end
+
+--- Returns the players in the match
+--- @return table
+function Match.getPlayersInMatch()
+    local players = {}
+    for player, matchId in pairs(playersMatch) do
+        if matchId ~= nil then
+            table.insert(players, {
+                playerId = player,
+                matchId = matchId
+            })
+        end
+    end
+    return players
+end
+
+--- Returns the running matches
+--- @return table
+function Match:getRunningMatches()
+    local runningMatches = {}
+    for _, match in ipairs(matches) do
+        if match.players then
+            table.insert(runningMatches, match)
+        end
+    end
+    return runningMatches
 end
 
 --- Returns the number of created matches
@@ -69,7 +104,7 @@ function Match:resetPlayerData(playerId)
         SetEntityHealth(playerPed, playerData.health)
         SetPedArmour(playerPed, playerData.armour)
         SetEntityCoords(playerPed, playerData.coords[1], playerData.coords[2], playerData.coords[3], true, false, false,
-        false)
+            false)
         SetEntityHeading(playerPed, playerData.heading)
     end
 end
