@@ -54,6 +54,7 @@ CreateThread(function()
                     loser = player
                     logClient(playerSource, 'You lose!')
                     match:stop()
+                    QueueManager:syncStats()
                 end
             end
             -- if loser, send message to winner
@@ -64,9 +65,9 @@ CreateThread(function()
                 print('Match ended ' .. match.matchId)
                 print('loser: ' .. loser)
                 print('winner: ' .. winner)
+                print('')
                 logClient(playerSource, 'You win!')
             end
-            print('')
         end
     end
 end)
