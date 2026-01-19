@@ -4,20 +4,19 @@ Match.__index = Match
 local matches = {}
 local playersMatch = {}
 
--- -1285.3945, -450.8088, 103.4655, 34.0079
--- -1305.8623, -418.2008, 103.4656, 215.3134
-function Match.new(players)
+function Match.new(players, cfg)
     local self = setmetatable({}, Match)
     self.players = players
     self.matchId = #matches + 1
     self.playerData = {}
+    self.onStart = cfg.onStart or function(match) end
     table.insert(matches, self)
-    print('Match created with id: ' .. self.matchId)
+    
     for _, player in ipairs(self.players) do
         playersMatch[player] = self.matchId
         self:setPlayerData(player)
     end
-
+    self.onStart(self)
     return self
 end
 
@@ -102,7 +101,6 @@ function Match:resetPlayerData(playerId)
     local playerPed = NetworkGetEntityFromNetworkId(playerId)
     local playerSource = NetworkGetEntityOwner(playerPed)
     if playerData == nil then return end
-
     TriggerClientEvent('match:health', playerSource, playerData.health)
     Citizen.Wait(1000)
     SetPedArmour(playerPed, playerData.armour)

@@ -2,15 +2,24 @@ Queue = {}
 Queue.__index = Queue
 
 --- Creates a new queue
+--- @param cfg table
 --- @return table
-function Queue.new()
+function Queue.new(cfg)
     local self = setmetatable({}, Queue)
+    self.cfg = {}
 
     -- FIFO order
     self.queue = {}
 
     -- quick lookup
     self.inQueue = {}
+
+    -- max players in match
+    self.maxPlayers = cfg.maxPlayers or 2
+
+    if cfg.onStart then
+        self.onStart = cfg.onStart
+    end
 
     return self
 end
@@ -81,23 +90,31 @@ function Queue:syncStats()
         }
     )
 end
+
 ---------------------------------------------------
 -- INTERNAL METHODS (PRIVATE)
 ---------------------------------------------------
 
 --- Tries to create a match
 function Queue:_tryCreateMatch()
-    if #self.queue < 2 then
+    if #self.queue < self.maxPlayers then
         return
     end
 
-    local players = {
-        table.remove(self.queue, 1),
-        table.remove(self.queue, 1)
-    }
+    local players = {}
+    for i = 1, self.maxPlayers do
+        table.insert(players, table.remove(self.queue, 1))
+    end
 
-    self.inQueue[players[1]] = nil
-    self.inQueue[players[2]] = nil
+    for _, player in ipairs(players) do
+        self.inQueue[player] = nil
+    end
 
-    Match.new(players)
+    local cfg = {}
+
+    if self.cfg.onStart then
+        cfg.onStart = self.cfg.onStart
+    end
+
+    Match.new(players, cfg)
 end

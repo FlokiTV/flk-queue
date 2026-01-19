@@ -1,28 +1,34 @@
-QueueManager = Queue.new()
-
-local function logClient(source, data)
-    if tonumber(source) == 0 then
-        print(data)
-    else
-        TriggerClientEvent('queue:log', source, data)
-    end
-end
+QueueManager = Queue.new({
+    maxPlayers = 2,
+    onStart = function(match)
+        print('Match created with id: ' .. match.matchId)
+        Log(-1, 'Match started with players: ' .. table.concat(match.players, ', '))
+        local player1 = match.players[1]
+        local player2 = match.players[2]
+        local player1Ped = NetworkGetEntityFromNetworkId(player1)
+        local player2Ped = NetworkGetEntityFromNetworkId(player2)
+        SetEntityCoords(player1Ped, -1285.3945, -450.8088, 103.4655, true, false, false, true)
+        SetEntityCoords(player2Ped, -1305.8623, -418.2008, 103.4656, true, false, false, true)
+        SetEntityHeading(player1Ped, 34.0079)
+        SetEntityHeading(player2Ped, 215.3134)
+    end,
+})
 
 RegisterCommand('queue', function(source, args, rawCommand)
     local userId = source == 0 and args[1] or source
     local userPed = GetPlayerPed(userId)
-    logClient(source, 'userId: ' .. userId)
-    logClient(source, 'userPed: ' .. userPed)
+    Log(source, 'userId: ' .. userId)
+    Log(source, 'userPed: ' .. userPed)
     if userPed == 0 then
-        logClient(source, 'Invalid player ped')
+        Log(source, 'Invalid player ped')
         return
     end
 
     local nId = NetworkGetNetworkIdFromEntity(userPed)
-    logClient(source, 'userNetId: ' .. nId)
-    logClient(source, 'isPlayerInMatch: ' .. (Match.isPlayerInMatch(nId) and 'true' or 'false'))
+    Log(source, 'userNetId: ' .. nId)
+    Log(source, 'isPlayerInMatch: ' .. (Match.isPlayerInMatch(nId) and 'true' or 'false'))
     if Match.isPlayerInMatch(nId) then
-        logClient(source, 'You are already in a match')
+        Log(source, 'You are already in a match')
         return
     end
 
@@ -52,7 +58,7 @@ CreateThread(function()
                 -- stop match if player is dead
                 if isDead then
                     loser = player
-                    logClient(playerSource, 'You lose!')
+                    Log(playerSource, 'You lose!')
                     match:stop()
                     QueueManager:syncStats()
                 end
@@ -66,7 +72,7 @@ CreateThread(function()
                 print('loser: ' .. loser)
                 print('winner: ' .. winner)
                 print('')
-                logClient(playerSource, 'You win!')
+                Log(playerSource, 'You win!')
             end
         end
     end
