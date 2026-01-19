@@ -59,10 +59,12 @@ CreateThread(function()
             -- if loser, send message to winner
             if loser then
                 local winner = players[1] == loser and players[2] or players[1]
+                local playerPed = NetworkGetEntityFromNetworkId(winner)
+                local playerSource = NetworkGetEntityOwner(playerPed)
                 print('Match ended ' .. match.matchId)
                 print('loser: ' .. loser)
                 print('winner: ' .. winner)
-                logClient(winner, 'You win!')
+                logClient(playerSource, 'You win!')
             end
             print('')
         end
