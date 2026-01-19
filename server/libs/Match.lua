@@ -42,7 +42,7 @@ function Match.new(players, cfg)
         playersMatch[player] = self.matchId
         local source = SourceFromNetId(player)
         self:setPlayerData(player)
-        SetPlayerRoutingBucket(tostring(source), self.matchId)
+        SetPlayerRoutingBucket(tostring(source), Config.bucketOffset + self.matchId)
         TriggerClientEvent(Event('state'), source, {
             state = 'match'
         })
@@ -70,7 +70,7 @@ function Match:stop()
         end
     end
 
-    Citizen.Wait(5000)
+    Citizen.Wait(3000)
 
     for _, player in ipairs(self.players) do
         self:resetPlayerData(player)
